@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             // $table->string('name', 255)->index()->unique()->default();
-            $table->timestamps();
+            $table->timestamps(); //captura o tempo, data, hora, dia
         });
     }
 
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('categories'); //é usado quando for usado o comando fresh que é necessário para adicionar colunas, excluir e afins então vai ser feito a exclusão e recriação da tabela
     }
 };

@@ -20,7 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-    ];
+    ]; //em fillable ficam os dados que serão considerados para fazer login ou cadastro
 
     /**
      * The attributes that should be hidden for serialization.
