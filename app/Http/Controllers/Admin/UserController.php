@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreUserRequest;
 
 class UserController extends Controller
 {
@@ -23,7 +24,7 @@ class UserController extends Controller
         return view('admin.users.create');
     }
 
-    public function store(Request $request){
+    public function store(StoreUserRequest $request){
         // $user =  new User;
         // $user->name = "carlos";
         // $user->email = "carlos@gmail.com";
@@ -35,6 +36,18 @@ class UserController extends Controller
         //dd($request->get("_token")); //vai retornar somente o atributo _token
         User::create($request->all());
 
-        return redirect()->route('users.index');
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'Usuário cadastrado com sucesso');
+    }
+
+    public function edit(string $id){
+            // $user = User::where( 'id', '=', $id)->first(); //usa-se o método first() para retornar um único registro ou null
+            // $user = User::where( 'id', $id)->first(); //quando se remove o '=' vai retornar a mesma coisa, pois por padrão a comparação de '=' já é utilizada
+            //também pode ser utilizado ao invés de ->first() o ->firstOrFail(), deste modo será retornado um único registro ou um erro 404, que é recomendado para APIs
+            //$user = User::find($id); //ao utilizar este método, será retornado um único valor ou um valor null como é o caso dos exemplos acima
+            if(!($user = User::find($id))){
+                return redirect()->route('users.index');
+            }
     }
 }
