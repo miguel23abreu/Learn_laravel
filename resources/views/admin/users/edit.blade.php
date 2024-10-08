@@ -10,17 +10,19 @@
 </form> -->
 
 @extends('admin.layouts.app')
-@section('title', 'Criar Novo Usuário')
+@section('title', 'Editar dados do Usuário')
 @section('content')
 
     
-    <h1>Novo usuário</h1>
+    <h1>Editar Usuáro {{@$user->name}}</h1>
 
     {{-- @include( 'admin.includes.alerts') --}}
 
     <x-alert/>      <!-- Outra forma de incluir alerts -->
-        <form action="{{ route('users.store') }}" method="POST">
-            @csrf()     <!-- token de formulário  -->
-            @include('admin.users.partials.form') 
+        <form action="{{ route('users.update', $user->id) }}" method="POST">
+            
+            <!-- <input type="text" name="_method" value="PUT"> -->
+            @method('PUT')
+            @include('admin.users.partials.form')
         </form>
 @endsection    

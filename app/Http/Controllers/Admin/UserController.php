@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
@@ -34,12 +35,13 @@ class UserController extends Controller
         //dd($request->only("_token")); //vai retornar todos somente o atributo _token
         //dd($request->all()); //vai retornar todos os elementos 
         //dd($request->get("_token")); //vai retornar somente o atributo _token
-        User::create($request->all());
+        User::create($request->validated());
 
         return redirect()
             ->route('users.index')
             ->with('success', 'Usuário cadastrado com sucesso');
     }
+
 
     public function edit(string $id){
             // $user = User::where( 'id', '=', $id)->first(); //usa-se o método first() para retornar um único registro ou null
@@ -47,7 +49,25 @@ class UserController extends Controller
             //também pode ser utilizado ao invés de ->first() o ->firstOrFail(), deste modo será retornado um único registro ou um erro 404, que é recomendado para APIs
             //$user = User::find($id); //ao utilizar este método, será retornado um único valor ou um valor null como é o caso dos exemplos acima
             if(!($user = User::find($id))){
-                return redirect()->route('users.index');
+                return redirect()->route('users.index')->with('message', 'Usuário não encontrado');
             }
+
+            return view('admin.users.edit', compact('user'));
+    }
+
+    public function update(UpdateUserRequest $request, string $id){
+        if(!($user = User::find($id))){
+            return back()->with('message', 'Usuário não encontrado');
+        }
+
+        $data = $request->only('name', 'email');
+        if($request->password) {                            //
+            $data['password'] = bcrypt($request->password); // modo de criptografar a senha
+        }                                                   //
+        $user->update($data);
+        dd($data);
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'Usuário editado com sucesso');
     }
 }
