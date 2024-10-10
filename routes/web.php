@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+Route::delete('/users/{user}/destroy', [UserController::class, 'destroy'])->name('users.destroy');
+Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 Route::put('/users/{user}', [UserController::class,  'update'])->name('users.update');
 Route::get('/users/{user}/edit', [UserController::class,  'edit'])->name('users.edit'); //rota que estava sendo usada somente para exemplo 
 Route::get('/users', [UserController::class, 'index'])->name('users.index'); //utilizando o método name, vai ser fixado a url e a action, sem se preocupar em mudar a url futuramente
